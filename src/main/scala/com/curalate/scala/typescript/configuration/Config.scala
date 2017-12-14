@@ -9,6 +9,7 @@ case class Config(
   emitClasses: Boolean = false,
   optionToNullable: Boolean = true,
   optionToUndefined: Boolean = false,
+  prefixInterfaces: Option[String] = None,
   outputStream: Option[PrintStream] = None,
   typeResolver: PartialFunction[ScalaType, TypeRef] = PartialFunction.empty
 )

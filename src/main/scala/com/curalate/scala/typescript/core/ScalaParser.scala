@@ -55,7 +55,7 @@ class ScalaParser(config: Config = Config()) {
     if(config.typeResolver.isDefinedAt(scalaType)) {
       return config.typeResolver.apply(scalaType)
     }
-    
+
     typeName match {
       case "Int" | "Byte" =>
         IntRef

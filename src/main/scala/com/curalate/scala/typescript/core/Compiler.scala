@@ -15,7 +15,7 @@ object Compiler {
 
   private def compileInterface(scalaClass: ScalaModel.CaseClass)(implicit config: Config) = {
     TypeScriptModel.InterfaceDeclaration(
-      s"I${scalaClass.name}",
+      s"${config.prefixInterfaces.getOrElse("")}${scalaClass.name}",
       scalaClass.members map { scalaMember =>
         TypeScriptModel.Member(
           scalaMember.name,

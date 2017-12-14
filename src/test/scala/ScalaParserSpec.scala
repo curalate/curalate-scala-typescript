@@ -1,12 +1,17 @@
-import TestTypes.ValueType
+import api.Data
 import com.curalate.scala.typescript.configuration.Config
 import com.curalate.scala.typescript.core.ScalaModel._
-import com.curalate.scala.typescript.core.{ScalaModel, ScalaParser, TypeScriptModel}
+import com.curalate.scala.typescript.core._
 import org.scalatest._
 import scala.reflect.runtime.universe._
 
-class ScalaParserSpec extends FlatSpec with Matchers {
+class GeneratorSpec extends FlatSpec with Matchers {
+  "Generator" should "generate namespaces" in {
+    TypeScriptGenerator.generateFromClassNames(classNames = Nil, namespaces = List("api"))
+  }
+}
 
+class ScalaParserSpec extends FlatSpec with Matchers {
   "Scala parser" should "parse case class with one primitive member" in {
     val parsed = new ScalaParser().parseCaseClasses(List(TestTypes.TestClass1Type))
     val expected = CaseClass("TestClass1", List(CaseClassMember("name", StringRef)), List.empty)
@@ -56,7 +61,7 @@ class ScalaParserSpec extends FlatSpec with Matchers {
 
   it should "handle custom type resolution" in {
     val c = Config().copy(typeResolver = {
-      case x if x <:< typeOf[ValueType] => {
+      case x if x <:< typeOf[Data] => {
         ScalaModel.StringRef
       }
     })
@@ -97,7 +102,7 @@ object TestTypes {
 
   case class TestClass7[T](name: Either[TestClass1, TestClass1B])
 
-  case class ValueType(value: String)
+  case class ValueType(override val f: String) extends Data
 
   case class WrapperType(data: ValueType)
 }
