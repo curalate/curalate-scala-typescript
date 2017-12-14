@@ -7,11 +7,16 @@ import scala.reflect.runtime.universe._
 
 class GeneratorSpec extends FlatSpec with Matchers {
   "Generator" should "generate namespaces" in {
-    TypeScriptGenerator.generateFromClassNames(classNames = Nil, namespaces = List("api"))
+    TypeScriptGenerator.generateFromClassNames(
+      javaClassNames = Nil,
+      javaNamespaces = List("api")
+    )
   }
 }
 
 class ScalaParserSpec extends FlatSpec with Matchers {
+  implicit def sToName(s: String) = ClassName(s"TestTypes.$s")
+
   "Scala parser" should "parse case class with one primitive member" in {
     val parsed = new ScalaParser().parseCaseClasses(List(TestTypes.TestClass1Type))
     val expected = CaseClass("TestClass1", List(CaseClassMember("name", StringRef)), List.empty)

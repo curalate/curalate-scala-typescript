@@ -7,17 +7,25 @@ object TypeScriptEmitter {
 
   import TypeScriptModel._
 
-  def emit(declaration: List[Declaration], out: PrintStream): Unit = {
+  def emitLeader(out: PrintStream) = {
+    out.println("// Auto generated code. DO NOT EDIT \n")
+  }
+
+  def emit(declaration: List[Declaration], out: PrintStream, namespace: Option[String]): Unit = {
+    namespace.foreach(ns => out.println(s"\ndeclare namespace ${ns} {\n"))
+
     declaration foreach {
       case decl: InterfaceDeclaration =>
         emitInterfaceDeclaration(decl, out)
       case decl: ClassDeclaration =>
         emitClassDeclaration(decl, out)
     }
+
+    namespace.foreach(_ => out.print(s"}\n"))
   }
 
   private def emitInterfaceDeclaration(decl: InterfaceDeclaration, out: PrintStream) = {
-    val InterfaceDeclaration(name, members, typeParams) = decl
+    val InterfaceDeclaration(name, ns, members, typeParams) = decl
     out.print(s"export interface $name")
     emitTypeParams(decl.typeParams, out)
     out.println(" {")
@@ -29,7 +37,7 @@ object TypeScriptEmitter {
   }
 
   private def emitClassDeclaration(decl: ClassDeclaration, out: PrintStream) = {
-    val ClassDeclaration(name, ClassConstructor(parameters), typeParams) = decl
+    val ClassDeclaration(name, ns, ClassConstructor(parameters), typeParams) = decl
     out.print(s"export class $name")
     emitTypeParams(decl.typeParams, out)
     out.println(" {")

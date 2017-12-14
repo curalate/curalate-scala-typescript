@@ -13,22 +13,24 @@ object Compiler {
     }
   }
 
-  private def compileInterface(scalaClass: ScalaModel.CaseClass)(implicit config: Config) = {
+  private def compileInterface(scalaClass: ScalaModel.CaseClass)(implicit config: Config): TypeScriptModel.InterfaceDeclaration = {
     TypeScriptModel.InterfaceDeclaration(
-      s"${config.prefixInterfaces.getOrElse("")}${scalaClass.name}",
-      scalaClass.members map { scalaMember =>
+      name = s"${config.prefixInterfaces.getOrElse("")}${scalaClass.name.name}",
+      members = scalaClass.members map { scalaMember =>
         TypeScriptModel.Member(
           scalaMember.name,
           compileTypeRef(scalaMember.typeRef, inInterfaceContext = true)
         )
       },
+      namespace = scalaClass.name.ns,
       typeParams = scalaClass.params
     )
   }
 
-  private def compileClass(scalaClass: ScalaModel.CaseClass)(implicit config: Config) = {
+  private def compileClass(scalaClass: ScalaModel.CaseClass)(implicit config: Config): TypeScriptModel.Declaration = {
     TypeScriptModel.ClassDeclaration(
-      scalaClass.name,
+      scalaClass.name.name,
+      scalaClass.name.ns,
       ClassConstructor(
         scalaClass.members map { scalaMember =>
           ClassConstructorParameter(

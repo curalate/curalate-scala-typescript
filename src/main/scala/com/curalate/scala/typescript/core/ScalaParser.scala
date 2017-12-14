@@ -8,7 +8,11 @@ class ScalaParser(config: Config = Config()) {
   import ScalaModel._
 
   def parseCaseClasses(caseClassTypes: List[Type]): List[CaseClass] = {
-    caseClassTypes.flatMap(getInvolvedTypes(Set.empty)).filter(isCaseClass).distinct.map(parseCaseClass).distinct
+    caseClassTypes.flatMap(getInvolvedTypes(Set.empty))
+      .filter(isCaseClass)
+      .distinct
+      .map(parseCaseClass)
+      .distinct
   }
 
   private def parseCaseClass(caseClassType: Type) = {
@@ -23,8 +27,9 @@ class ScalaParser(config: Config = Config()) {
       val memberName = member.name.toString
       CaseClassMember(memberName, getTypeRef(member.returnType.map(Reflection.dealias), typeParams.toSet))
     }
+
     CaseClass(
-      caseClassType.typeSymbol.name.toString,
+      ClassName(caseClassType.typeSymbol.fullName),
       members.toList,
       typeParams
     )
