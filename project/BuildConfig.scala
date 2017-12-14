@@ -46,7 +46,7 @@ object BuildConfig {
         "-language:experimental.macros",
         "-unchecked",
         "-Ywarn-nullary-unit",
-        "-Xfatal-warnings",
+        //"-Xfatal-warnings",
         "-Ywarn-dead-code",
         "-Xfuture"
       ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
