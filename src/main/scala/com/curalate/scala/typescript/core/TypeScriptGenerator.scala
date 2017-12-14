@@ -3,6 +3,7 @@ package com.curalate.scala.typescript.core
 import com.curalate.scala.typescript.configuration.Config
 import org.reflections.Reflections
 import org.reflections.scanners.SubTypesScanner
+import org.reflections.util.ClasspathHelper
 import scala.collection.JavaConverters._
 import scala.reflect.runtime.universe._
 
@@ -15,7 +16,9 @@ object TypeScriptGenerator {
   ) = {
     implicit val mirror = runtimeMirror(classLoader)
 
-    val allClasses = namespaces.flatMap(ns => new Reflections(ns, new SubTypesScanner(false)).getAllTypes().asScala) ++ classNames
+    val allClasses = namespaces.flatMap(ns =>
+      new Reflections(ClasspathHelper.forPackage(ns, classLoader), new SubTypesScanner(false)
+      ).getAllTypes().asScala) ++ classNames
 
     val allTypes = allClasses map { className =>
       mirror.staticClass(className).toType
