@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
   "org.reflections" % "reflections" % "0.9.11",
   "com.google.code.findbugs" % "jsr305" % "1.3.+",
   "org.slf4j" % "slf4j-api" % "1.7.25" % "provided",
+  "javax.servlet" % "servlet-api" % "2.5" % "provided",
   "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 ) ++ Dependencies.testDeps
 

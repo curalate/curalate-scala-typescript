@@ -15,7 +15,7 @@ class GeneratorSpec extends FlatSpec with Matchers {
 }
 
 class ScalaParserSpec extends FlatSpec with Matchers {
-  implicit def sToName(s: String) = ClassName(s"TestTypes.$s")
+  implicit def sToName(s: String): ClassName = ClassName(s"TestTypes.$s")
 
   "Scala parser" should "parse case class with one primitive member" in {
     val parsed = new ScalaParser().parseCaseClasses(List(TestTypes.TestClass1Type))
